@@ -108,8 +108,6 @@ namespace Newtonsoft.Json.Serialization
 #endif
 #if !(NETFX_CORE || PORTABLE40 || PORTABLE)
             new BinaryConverter(),
-            new DataSetConverter(),
-            new DataTableConverter(),
 #endif
 #if NETFX_CORE
             new JsonValueConverter(),

@@ -36,10 +36,6 @@ using System.Reflection;
 #if NET20
 using Newtonsoft.Json.Utilities.LinqBridge;
 #endif
-#if !(NETFX_CORE || PORTABLE40 || PORTABLE)
-using System.Data.SqlTypes;
-
-#endif
 
 namespace Newtonsoft.Json.Utilities
 {
@@ -515,13 +511,6 @@ namespace Newtonsoft.Json.Utilities
                 return ConvertResult.CannotConvertNull;
             }
 #endif
-#if !(NETFX_CORE || PORTABLE40 || PORTABLE)
-            if (initialValue is INullable)
-            {
-                value = EnsureTypeAssignable(ToValue((INullable)initialValue), initialType, targetType);
-                return ConvertResult.Success;
-            }
-#endif
 
             if (targetType.IsInterface() || targetType.IsGenericTypeDefinition() || targetType.IsAbstract())
             {
@@ -584,26 +573,6 @@ namespace Newtonsoft.Json.Utilities
 
             throw new ArgumentException("Could not cast or convert from {0} to {1}.".FormatWith(CultureInfo.InvariantCulture, (initialType != null) ? initialType.ToString() : "{null}", targetType));
         }
-
-#if !(NETFX_CORE || PORTABLE40 || PORTABLE)
-        public static object ToValue(INullable nullableValue)
-        {
-            if (nullableValue == null)
-                return null;
-            else if (nullableValue is SqlInt32)
-                return ToValue((SqlInt32)nullableValue);
-            else if (nullableValue is SqlInt64)
-                return ToValue((SqlInt64)nullableValue);
-            else if (nullableValue is SqlBoolean)
-                return ToValue((SqlBoolean)nullableValue);
-            else if (nullableValue is SqlString)
-                return ToValue((SqlString)nullableValue);
-            else if (nullableValue is SqlDateTime)
-                return ToValue((SqlDateTime)nullableValue);
-
-            throw new ArgumentException("Unsupported INullable type: {0}".FormatWith(CultureInfo.InvariantCulture, nullableValue.GetType()));
-        }
-#endif
 
 #if !(NETFX_CORE || PORTABLE40 || PORTABLE)
         internal static TypeConverter GetConverter(Type t)
